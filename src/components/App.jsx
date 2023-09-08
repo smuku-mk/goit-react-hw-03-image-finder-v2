@@ -6,6 +6,7 @@ import { ImageGallery } from './ImageGallery';
 import { ImageGalleryItem } from './ImageGalleryItem';
 import { Button } from './Button';
 import { Loader } from './Loader';
+import { Modal } from './Modal';
 
 class App extends Component {
   state = {
@@ -13,6 +14,7 @@ class App extends Component {
     images: [],
     query: '',
     loading: false,
+    modal: false,
   };
 
   handleSubmit = async evt => {
@@ -31,7 +33,7 @@ class App extends Component {
     form.reset();
   };
 
-  handleClick = async () => {
+  handleBtnClick = async () => {
     const { page, query } = this.state;
     const nextPage = page + 1;
     this.setState({ loading: true });
@@ -43,8 +45,18 @@ class App extends Component {
     }));
   };
 
+  handleImgOpenClick = () => {
+    this.setState({ modal: true });
+    console.log('open');
+  };
+
+  handleImgCloseClick = () => {
+    this.setState({ modal: false });
+    console.log('close');
+  };
+
   render() {
-    const { images, loading } = this.state;
+    const { images, loading, modal } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
@@ -54,10 +66,20 @@ class App extends Component {
               key={image.id}
               imgSrc={image.webformatURL}
               imgAlt={image.tags}
-            />
+              onClick={this.handleImgOpenClick}
+            >
+              {modal && (
+                <Modal
+                  key={image.id}
+                  onClose={this.handleImgCloseClick}
+                  imgSrc={image.largeImageURL}
+                  imgAlt={image.tags}
+                />
+              )}
+            </ImageGalleryItem>
           ))}
         </ImageGallery>
-        {images.length ? <Button onClick={this.handleClick} /> : ''}
+        {images.length ? <Button onClick={this.handleBtnClick} /> : ''}
         {loading && <Loader />}
       </>
     );

@@ -14,7 +14,7 @@ class App extends Component {
     images: [],
     query: '',
     loading: false,
-    modal: false,
+    selectedImage: null,
   };
 
   handleSubmit = async evt => {
@@ -45,42 +45,31 @@ class App extends Component {
     }));
   };
 
-  handleImgOpenClick = () => {
-    this.setState({ modal: true });
-    console.log('open');
+  handleImgOpenClick = image => {
+    this.setState({ selectedImage: image });
   };
 
-  handleImgCloseClick = () => {
-    this.setState({ modal: false });
-    console.log('close');
+  handleImgCloseClick = image => {
+    this.setState({ selectedImage: null });
   };
 
   render() {
-    const { images, loading, modal } = this.state;
+    const { images, loading, selectedImage } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
         <ImageGallery>
-          {images.map(image => (
-            <ImageGalleryItem
-              key={image.id}
-              imgSrc={image.webformatURL}
-              imgAlt={image.tags}
-              onClick={this.handleImgOpenClick}
-            >
-              {modal && (
-                <Modal
-                  key={image.id}
-                  onClose={this.handleImgCloseClick}
-                  imgSrc={image.largeImageURL}
-                  imgAlt={image.tags}
-                />
-              )}
-            </ImageGalleryItem>
-          ))}
+          <ImageGalleryItem images={images} onClick={this.handleImgOpenClick} />
         </ImageGallery>
-        {images.length ? <Button onClick={this.handleBtnClick} /> : ''}
         {loading && <Loader />}
+        {images.length ? <Button onClick={this.handleBtnClick} /> : ''}
+        {selectedImage && (
+          <Modal
+            onClose={this.handleImgCloseClick}
+            imgSrc={selectedImage.largeImageURL}
+            imgAlt={selectedImage.tags}
+          />
+        )}
       </>
     );
   }

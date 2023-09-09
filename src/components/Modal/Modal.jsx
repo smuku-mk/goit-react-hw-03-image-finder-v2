@@ -1,4 +1,5 @@
 import css from './Modal.module.css';
+import PropTypes from 'prop-types';
 
 export const Modal = ({ imgSrc, imgAlt, onClose }) => {
   return (
@@ -8,4 +9,10 @@ export const Modal = ({ imgSrc, imgAlt, onClose }) => {
       </div>
     </div>
   );
+};
+
+Modal.propTypes = {
+  imgSrc: PropTypes.string.isRequired,
+  imgAlt: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 };

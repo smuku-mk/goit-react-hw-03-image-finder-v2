@@ -5,7 +5,7 @@ export const ImageGalleryItem = ({ images, onClick }) => {
   return (
     <>
       {images.map(image => (
-        <li li key={image.id} className={css.galleryItem}>
+        <li key={image.id} className={css.galleryItem}>
           <img
             className={css.galleryItemImage}
             src={image.webformatURL}
@@ -19,6 +19,12 @@ export const ImageGalleryItem = ({ images, onClick }) => {
 };
 
 ImageGalleryItem.propTypes = {
-  images: PropTypes.array.isRequired,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   onClick: PropTypes.func.isRequired,
 };

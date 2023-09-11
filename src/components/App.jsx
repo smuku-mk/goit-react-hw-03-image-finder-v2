@@ -3,7 +3,6 @@ import { Component } from 'react';
 import { Searchbar } from './Searchbar';
 import { fetchImages } from '../services/images';
 import { ImageGallery } from './ImageGallery';
-import { ImageGalleryItem } from './ImageGalleryItem';
 import { Button } from './Button';
 import { Loader } from './Loader';
 import { Modal } from './Modal';
@@ -49,7 +48,7 @@ class App extends Component {
     this.setState({ selectedImage: image });
   };
 
-  handleImgCloseClick = image => {
+  handleImgCloseClick = () => {
     this.setState({ selectedImage: null });
   };
 
@@ -58,9 +57,7 @@ class App extends Component {
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery>
-          <ImageGalleryItem images={images} onClick={this.handleImgOpenClick} />
-        </ImageGallery>
+        <ImageGallery images={images} onClick={this.handleImgOpenClick} />
         {loading && <Loader />}
         {images.length ? <Button onClick={this.handleBtnClick} /> : ''}
         {selectedImage && (

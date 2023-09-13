@@ -2,10 +2,12 @@ import { Component } from 'react';
 
 import { Searchbar } from './Searchbar';
 import { ImageGallery } from './ImageGallery';
+import { Modal } from './Modal';
 
 export class App extends Component {
   state = {
     query: '',
+    selectedImage: null,
   };
 
   handleSubmit = data => {
@@ -15,12 +17,30 @@ export class App extends Component {
     });
   };
 
+  handleImgOpenClick = image => {
+    this.setState({ selectedImage: image });
+  };
+
+  handleImgCloseClick = () => {
+    this.setState({ selectedImage: null });
+  };
+
   render() {
-    const { query } = this.state;
+    const { query, selectedImage } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery query={query} />
+        <ImageGallery
+          query={query}
+          handleImgOpenClick={this.handleImgOpenClick}
+        />
+        {selectedImage && (
+          <Modal
+            onClose={this.handleImgCloseClick}
+            imgSrc={selectedImage.largeImageURL}
+            imgAlt={selectedImage.tags}
+          />
+        )}
       </>
     );
   }

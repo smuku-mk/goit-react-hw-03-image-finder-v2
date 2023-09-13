@@ -2,14 +2,13 @@ import { Component } from 'react';
 import css from './ImageGallery.module.css';
 
 import { fetchImages } from '../../services';
-import { ImageGalleryItem, Button, Loader, Modal } from './components';
+import { ImageGalleryItem, Button, Loader } from './components';
 
 export class ImageGallery extends Component {
   state = {
     images: [],
     page: 1,
     loading: false,
-    selectedImage: null,
   };
 
   componentDidUpdate(prevProps) {
@@ -41,16 +40,8 @@ export class ImageGallery extends Component {
     }));
   };
 
-  handleImgOpenClick = image => {
-    this.setState({ selectedImage: image });
-  };
-
-  handleImgCloseClick = () => {
-    this.setState({ selectedImage: null });
-  };
-
   render() {
-    const { images, loading, selectedImage } = this.state;
+    const { images, loading } = this.state;
     return (
       <>
         <ul className={css.gallery}>
@@ -58,19 +49,12 @@ export class ImageGallery extends Component {
             <ImageGalleryItem
               key={image.id}
               image={image}
-              onClick={this.handleImgOpenClick}
+              onClick={this.props.handleImgOpenClick}
             />
           ))}
         </ul>
         {images.length ? <Button onClick={this.handleBtnClick} /> : ''}
         {loading && <Loader />}
-        {selectedImage && (
-          <Modal
-            onClose={this.handleImgCloseClick}
-            imgSrc={selectedImage.largeImageURL}
-            imgAlt={selectedImage.tags}
-          />
-        )}
       </>
     );
   }
